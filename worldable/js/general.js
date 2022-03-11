@@ -1,65 +1,67 @@
-let palabraSecreta = "SAUNA";
-let intento = 1;
-var palabrasIntroducida = "";
+let secretWord = "SAUNA";
+let tries = 1;
+var userWord = "";
 const allEqual = arr => arr.every(val => val === 1);
 
-function rightOrder(palabraSecreta, palabraIntroducida) {
-    let resultados = [];
-    for (let i = 0; i < palabraIntroducida.length; i++) {
-        if (palabraIntroducida[i].toUpperCase() == palabraSecreta[i]) {
-            resultados.push(1);
-        } else if (palabraSecreta.includes(palabraIntroducida[i].toUpperCase())) {
-            resultados.push(0);
+function rightOrder(secretWord, insertedWord) {
+    let results = [];
+    for (let i = 0; i < insertedWord.length; i++) {
+        if (insertedWord[i].toUpperCase() == secretWord[i]) {
+            results.push(1);
+        } else if (secretWord.includes(insertedWord[i].toUpperCase())) {
+            results.push(0);
         } else {
-            resultados.push(-1);
+            results.push(-1);
         }
     }
-    return resultados;
+    return results;
 }
 
 function insertLettersIntoBox(palabra) {
-    let cuadrados = document.querySelectorAll(".input" + intento);
-    for (let i = 0; i < cuadrados.length; i++) {
+    let squares = document.querySelectorAll(".input" + tries);
+    for (let i = 0; i < squares.length; i++) {
         if (palabra[i] != undefined) {
-            cuadrados[i].innerHTML = palabra[i];
+            squares[i].innerHTML = palabra[i];
         } else {
-            cuadrados[i].innerHTML = "";
+            squares[i].innerHTML = "";
         }
     }
 }
 
-function comprobar() {
-    let check = rightOrder(palabraSecreta, palabrasIntroducida);
-    if (palabrasIntroducida.length != 5) {
-        alert("Error falta/n letra/s")
+function checkCorrect() {
+    let checkLetters = rightOrder(secretWord, userWord);
+    if (userWord.length != 5) {
+        alert("Missing letter/s")
     } else {
-        cuadrados = document.querySelectorAll(".input" + intento);
-        palabrasIntroducida = "";
-        for (let i = 0; i < check.length; i++) {
-            switch (check[i]) {
+        squares = document.querySelectorAll(".input" + tries);
+        userWord = "";
+        for (let i = 0; i < checkLetters.length; i++) {
+            switch (checkLetters[i]) {
                 case -1:
-                    cuadrados[i].classList.add("incorrect");
+                    squares[i].classList.add("incorrect");
                     break;
                 case 0:
-                    cuadrados[i].classList.add("almost");
+                    squares[i].classList.add("almost");
                     break;
                 case 1:
-                    cuadrados[i].classList.add("correct");
+                    squares[i].classList.add("correct");
                     break;
             }
         }
-        intento++;
+        tries++;
     }
-    endGame(check);
+    endGame(checkLetters);
 }
 
 function endGame(results) {
     if (allEqual(results)) {
-        alert("YOU WIN!")
+        document.querySelector("#end-game").innerHTML=("YOU WIN!");        
+        document.querySelector("button").style.backgroundColor="green";
         document.removeEventListener('keydown', start);
         document.querySelector("button").removeAttribute("onclick");
-    } else if (allEqual(results) == false && intento == 7) {
-        alert("YOU LOSE!")
+    } else if (allEqual(results) == false && tries == 7) {
+        document.querySelector("#end-game").innerHTML=("YOU LOSE!");        
+        document.querySelector("button").style.backgroundColor="grey";
         document.removeEventListener('keydown', start);
         document.querySelector("button").removeAttribute("onclick");
     }
@@ -68,14 +70,14 @@ function endGame(results) {
 
 function start(event) {
     if (event.key == "Backspace") {
-        palabrasIntroducida = palabrasIntroducida.slice(0, -1);
-        insertLettersIntoBox(palabrasIntroducida);
+        userWord = userWord.slice(0, -1);
+        insertLettersIntoBox(userWord);
     } else if (event.key == "Enter") {
-        comprobar();
+        checkCorrect();
     } else if((event.keyCode >= 65 && event.keyCode <= 90) || event.keyCode==192 ){
-        if (palabrasIntroducida.length < 5) {
-            palabrasIntroducida += event.key;
-            insertLettersIntoBox(palabrasIntroducida);
+        if (userWord.length < 5) {
+            userWord += event.key;
+            insertLettersIntoBox(userWord);
         }
     }
 }
