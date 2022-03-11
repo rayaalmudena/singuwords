@@ -1,4 +1,5 @@
-let secretWord = "SAUNA";
+let secretWordsList=["SAUNA","COSTA","SUEÑO","JUNIO","RATÓN"]
+let secretWord = secretWordsList[Math.floor(Math.random() * secretWordsList.length)];
 let tries = 1;
 var userWord = "";
 const allEqual = arr => arr.every(val => val === 1);
