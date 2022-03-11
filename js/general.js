@@ -50,8 +50,9 @@ function checkCorrect() {
             }
         }
         tries++;
+        endGame(checkLetters);
     }
-    endGame(checkLetters);
+    
 }
 
 function endGame(results) {
